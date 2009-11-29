@@ -1,0 +1,36 @@
+== Test app for PPE Reconciliation
+
+Quick test of idea for making PPE field reconciliation database backed instead of using marshalled objects.
+
+To run the test, type:
+
+./rebuild
+
+
+Results of test on MBP 2.8ghz 4GB, PostgreSQL 8.3
+
+************************************************************
+IMPORT TEST BENCHMARKS
+TESTING JOIN WRITE AND READ SPEEDS FOR RECONCILIATION PA AND FIELDS
+************************************************************
+
+************************************************************
+CREATING 50 PA'S WITH 20 ASSOCIATED FIELDS EACH
+12.065015 seconds to create 50 pas' with 20 fields each.
+120.65015 minutes to create all German PA's (30,000)
+
+
+Loading all PA's and their fields. SQL output and timings below
+
+MANUAL SQL - SELECT "fields".*, t0.pa_id as the_parent_record_id FROM "fields" INNER JOIN "fields_pas" t0 ON "fields".id = t0.field_id
+  SQL (0.1ms)   SET client_min_messages TO 'panic'
+  SQL (0.1ms)   SET client_min_messages TO 'notice'
+  Pa Load (8.0ms)   SELECT "fields".*, t0.pa_id as the_parent_record_id FROM "fields" INNER JOIN "fields_pas" t0 ON "fields".id = t0.field_id
+
+ACTIVERECORD SQL - Pa.all :include => :fields
+  Pa Load (0.8ms)   SELECT * FROM "pas" 
+  Field Load (6.7ms)   SELECT "fields".*, t0.pa_id as the_parent_record_id FROM "fields" INNER JOIN "fields_pas" t0 ON "fields".id = t0.field_id WHERE (t0.pa_id IN (1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50)) 
+************************************************************
+
+
+
